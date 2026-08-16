@@ -27,17 +27,12 @@ namespace Model.Runtime.Projectiles
             float localHeight = 0f;
             
 
-            ///////////////////////////////////////
-            // Insert you code here
-            ///////////////////////////////////////
+
             float totalDistance = 10;
             float maxHeight = totalDistance * 0.6f;
             float x = maxHeight * (- (t * 2 - 1) * (t * 2 - 1) + 1);
             localHeight = x;
 
-            ///////////////////////////////////////
-            // End of the code to insert
-            ///////////////////////////////////////
 
 
             Height = localHeight;
