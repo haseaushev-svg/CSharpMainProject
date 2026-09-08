@@ -8,8 +8,8 @@ namespace UnitBrains.Player
     {
         public override string TargetUnitName => "Cobra Commando";
         private const float OverheatTemperature = 3f;
-        private const int OverheatCooldown = 2;
-        private int _temperature = 1;
+        private const float OverheatCooldown = 2f;
+        private float _temperature = 0f;
         private float _cooldownTime = 0f;
         private bool _overheated;
 
@@ -20,8 +20,9 @@ namespace UnitBrains.Player
             {
                 return; 
             }
+            
 
-            for (float i = 0; i < _temperature; i++)
+            for (int i = 0; i <= _temperature; i++)
             {
                 var projectile = CreateProjectile(forTarget);
                 AddProjectileToList(projectile, intoList);
@@ -53,7 +54,7 @@ namespace UnitBrains.Player
             if (_overheated)
             {              
                 _cooldownTime += Time.deltaTime;
-                float t = _cooldownTime / (OverheatCooldown/10);
+                float t = _cooldownTime / OverheatCooldown;
                 _temperature = Mathf.Lerp(OverheatTemperature, 0, t);
                 if (t >= 1)
                 {
@@ -71,7 +72,7 @@ namespace UnitBrains.Player
 
         private void IncreaseTemperature()
         {
-            _temperature += 1f;
+            _temperature += 1;
             if (_temperature >= OverheatTemperature) _overheated = true;
         }
     }
