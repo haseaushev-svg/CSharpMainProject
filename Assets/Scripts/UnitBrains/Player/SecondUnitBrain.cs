@@ -8,8 +8,8 @@ namespace UnitBrains.Player
     {
         public override string TargetUnitName => "Cobra Commando";
         private const float OverheatTemperature = 3f;
-        private const float OverheatCooldown = 2f;
-        private float _temperature = 0f;
+        private const int OverheatCooldown = 2;
+        private int _temperature = 1;
         private float _cooldownTime = 0f;
         private bool _overheated;
 
