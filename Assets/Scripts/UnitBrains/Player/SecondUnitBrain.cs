@@ -37,6 +37,7 @@ namespace UnitBrains.Player
 
             float minDistance = float.MaxValue;
             Vector2Int closestTarget = Vector2Int.zero;
+            bool found = false; // По дефолду
 
             foreach (Vector2Int target in result)
             {
@@ -45,19 +46,25 @@ namespace UnitBrains.Player
                 {
                     minDistance = distance;
                     closestTarget = target;
+                    found = true; // я вижу его выдвигаюсь
                 }
             }
 
-            if (closestTarget != Vector2Int.zero)
+            if (found)
             {
                 result.Clear();
                 result.Add(closestTarget);
             }
+            else
+            {
+               
+                result.Clear();
+            }
 
             return result;
-            
         }
-                ///////////////////////////////////////
+
+        ///////////////////////////////////////
         public override void Update(float deltaTime, float time)
         {
             if (_overheated)
