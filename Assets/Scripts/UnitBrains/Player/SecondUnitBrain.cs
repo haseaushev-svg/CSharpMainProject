@@ -18,15 +18,20 @@ namespace UnitBrains.Player
 
         protected override void GenerateProjectiles(Vector2Int forTarget, List<BaseProjectile> intoList)
         {
-            BaseProjectile projectile = CreateProjectile(forTarget);
+            float overheatTemperature = OverheatTemperature;
+            ///////////////////////////////////////
+            // Homework 1.3 (1st block, 3rd module)
+            ///////////////////////////////////////           
+            var projectile = CreateProjectile(forTarget);
             AddProjectileToList(projectile, intoList);
+            ///////////////////////////////////////
         }
 
         public override Vector2Int GetNextStep()
         {
             List<Vector2Int> targets = SelectTargets();
 
-            // если целей нет или цель уже в зоне атаки — стоим на месте
+            // Я устал это делать но надо закончить.... я воин света
             if (targets.Count == 0 || IsTargetInRange(targets[0]) == true)
             {
                 return unit.Pos;
@@ -47,7 +52,9 @@ namespace UnitBrains.Player
 
             return step;
         }
-
+        ///////////////////////////////////////
+        // Homework 1.4 (1st block, 4rd module)
+        ///////////////////////////////////////
         protected override List<Vector2Int> SelectTargets()
         {
             List<Vector2Int> result = new List<Vector2Int>();
@@ -67,41 +74,45 @@ namespace UnitBrains.Player
 
             Vector2Int ownBase = runtimeModel.RoMap.Bases[RuntimeModel.PlayerId];
 
-            float minDist = float.MaxValue;
-            Vector2Int closest = Vector2Int.zero;
+            float minDistance = float.MaxValue;
+            Vector2Int closestTarget = Vector2Int.zero;
+            bool found = false; // По дефолду
 
-            foreach (Vector2Int t in all)
+            foreach (Vector2Int target in all) // Бартер за кусок пирога для надежности
             {
-                float d = (t - ownBase).sqrMagnitude;
-
-                if (d < minDist)
+                float distance = (target - ownBase).sqrMagnitude;
+                if (distance < minDistance)
                 {
-                    minDist = d;
-                    closest = t;
+                    minDistance = distance;
+                    closestTarget = target;
+                    found = true; // я вижу его выдвигаюсь
                 }
             }
 
-            if (IsTargetInRange(closest) == true)
+            if (found == true)
             {
-                result.Add(closest);
-            }
-            else
-            {
-                _farTargets.Add(closest);
-                result.Add(closest);
+                if (IsTargetInRange(closestTarget) == true)
+                {
+                    result.Add(closestTarget);
+                }
+                else
+                {
+                    _farTargets.Add(closestTarget);
+                    result.Add(closestTarget);
+                }
             }
 
             return result;
         }
 
+        ///////////////////////////////////////
         public override void Update(float deltaTime, float time)
         {
-            if (_overheated == true)
+            if (_overheated)
             {
                 _cooldownTime += Time.deltaTime;
                 float t = _cooldownTime / (OverheatCooldown / 10);
                 _temperature = Mathf.Lerp(OverheatTemperature, 0, t);
-
                 if (t >= 1)
                 {
                     _cooldownTime = 0;
@@ -109,25 +120,18 @@ namespace UnitBrains.Player
                 }
             }
         }
+        
 
         private int GetTemperature()
         {
-            if (_overheated == true)
-            {
-                return (int)OverheatTemperature;
-            }
-
-            return (int)_temperature;
+            if (_overheated) return (int)OverheatTemperature;
+            else return (int)_temperature;
         }
 
         private void IncreaseTemperature()
         {
             _temperature += 1f;
-
-            if (_temperature >= OverheatTemperature)
-            {
-                _overheated = true;
-            }
+            if (_temperature >= OverheatTemperature) _overheated = true;
         }
     }
 }
